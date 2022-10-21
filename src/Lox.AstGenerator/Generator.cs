@@ -80,7 +80,7 @@ public class Generator : ISourceGenerator
                 new("Expr", "Value", null)
             }
         ),
-        
+
         new(
             Name: "Logical",
             Properties: new TypeProperty[]
@@ -134,6 +134,15 @@ public class Generator : ISourceGenerator
                 new("Expr", "Condition", null),
                 new("Stmt", "ThenBranch", null),
                 new("Stmt?", "ElseBranch", null)
+            }
+        ),
+
+        new(
+            Name: "While",
+            Properties: new TypeProperty[]
+            {
+                new("Expr", "Condition", null),
+                new("Stmt", "Body", null)
             }
         )
     };

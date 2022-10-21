@@ -184,6 +184,7 @@ public class Parser
     private Stmt Statement() {
         if (Match(IF)) return IfStatement();
         if (Match(PRINT)) return PrintStatement();
+        if (Match(WHILE)) return WhileStatement();
         if (Match(LEFT_BRACE)) return new Stmt.Block(Block());
         return ExpressionStatement();
     }
@@ -206,6 +207,15 @@ public class Parser
         Expr value = Expression();
         Consume(SEMICOLON, "Expect ';' after value.");
         return new Stmt.Print(value);
+    }
+
+    private Stmt WhileStatement() {
+        Consume(LEFT_PAREN, "Expect '(' after 'while'.");
+        Expr condition = Expression();
+        Consume(RIGHT_PAREN, "Expect ')' after condition.");
+
+        Stmt body = Statement();
+        return new Stmt.While(condition, body);
     }
 
     private Stmt ExpressionStatement() {
