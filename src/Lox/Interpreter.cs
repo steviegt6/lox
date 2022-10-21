@@ -88,6 +88,19 @@ public class Interpreter : Expr.IVisitor<object?>, Stmt.IVisitor<object?>
         return expr.Value;
     }
 
+    public object? VisitLogicalExpr(Expr.Logical expr) {
+        object? left = Evaluate(expr.Left);
+
+        if (expr.Operator.Type == OR) {
+            if (IsTruthy(left)) return left;
+        }
+        else {
+            if (!IsTruthy(left)) return left;
+        }
+
+        return Evaluate(expr.Right);
+    }
+
     public object? VisitUnaryExpr(Expr.Unary expr) {
         object? right = Evaluate(expr.Right);
 

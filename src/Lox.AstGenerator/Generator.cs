@@ -79,6 +79,16 @@ public class Generator : ISourceGenerator
                 new("Token", "Name", null),
                 new("Expr", "Value", null)
             }
+        ),
+        
+        new(
+            Name: "Logical",
+            Properties: new TypeProperty[]
+            {
+                new("Expr", "Left", null),
+                new("Token", "Operator", null),
+                new("Expr", "Right", null)
+            }
         )
     };
 

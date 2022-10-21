@@ -37,7 +37,7 @@ public class Parser
     }
 
     private Expr Assignment() {
-        Expr expr = Equality();
+        Expr expr = Or();
 
         if (Match(EQUAL)) {
             Token equals = Previous();
@@ -49,6 +49,30 @@ public class Parser
             }
 
             Error(equals, "Invalid assignment target.");
+        }
+
+        return expr;
+    }
+
+    private Expr Or() {
+        Expr expr = And();
+
+        while (Match(OR)) {
+            Token op = Previous();
+            Expr right = And();
+            expr = new Expr.Logical(expr, op, right);
+        }
+
+        return expr;
+    }
+
+    private Expr And() {
+        Expr expr = Equality();
+
+        while (Match(AND)) {
+            Token op = Previous();
+            Expr right = Equality();
+            expr = new Expr.Logical(expr, op, right);
         }
 
         return expr;
