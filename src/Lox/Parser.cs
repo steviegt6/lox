@@ -159,6 +159,7 @@ public class Parser
 
     private Stmt Statement() {
         if (Match(PRINT)) return PrintStatement();
+        if (Match(LEFT_BRACE)) return new Stmt.Block(Block());
         return ExpressionStatement();
     }
 
@@ -172,6 +173,17 @@ public class Parser
         Expr expr = Expression();
         Consume(SEMICOLON, "Expect ';' after value.");
         return new Stmt.Expression(expr);
+    }
+
+    private List<Stmt?> Block() {
+        List<Stmt?> statements = new();
+
+        while (!Check(RIGHT_BRACE) && !IsAtEnd()) {
+            statements.Add(Declaration());
+        }
+        
+        Consume(RIGHT_BRACE, "Expect '}' after block.");
+        return statements;
     }
 
     private Token Consume(TokenType type, string message) {

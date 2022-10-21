@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace Lox;
@@ -110,6 +111,11 @@ public class Interpreter : Expr.IVisitor<object?>, Stmt.IVisitor<object?>
 
     #region Statement Visiting
 
+    public object? VisitBlockStmt(Stmt.Block stmt) {
+        ExecuteBlock(stmt.Statements, new Environment(Environment));
+        return null;
+    }
+
     public object? VisitExpressionStmt(Stmt.Expression stmt) {
         Evaluate(stmt.Expr);
         return null;
@@ -128,6 +134,21 @@ public class Interpreter : Expr.IVisitor<object?>, Stmt.IVisitor<object?>
     }
 
     #endregion
+
+    private void ExecuteBlock(List<Stmt> statements, Environment environment) {
+        Environment previous = Environment;
+
+        try {
+            Environment = environment;
+
+            foreach (Stmt statement in statements) {
+                Execute(statement);
+            }
+        }
+        finally {
+            Environment = previous;
+        }
+    }
 
     private object? Evaluate(Expr expr) {
         return expr.Accept(this);

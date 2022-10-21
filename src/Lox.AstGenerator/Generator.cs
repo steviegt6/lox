@@ -108,6 +108,14 @@ public class Generator : ISourceGenerator
                 new("Expr?", "Initializer", null)
             }
         ),
+
+        new(
+            Name: "Block",
+            Properties: new TypeProperty[]
+            {
+                new("System.Collections.Generic.List<Stmt>", "Statements", null)
+            }
+        )
     };
 
     public void Initialize(GeneratorInitializationContext context) { }
