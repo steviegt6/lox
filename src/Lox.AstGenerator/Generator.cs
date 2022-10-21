@@ -115,6 +115,16 @@ public class Generator : ISourceGenerator
             {
                 new("System.Collections.Generic.List<Stmt>", "Statements", null)
             }
+        ),
+
+        new(
+            Name: "If",
+            Properties: new TypeProperty[]
+            {
+                new("Expr", "Condition", null),
+                new("Stmt", "ThenBranch", null),
+                new("Stmt?", "ElseBranch", null)
+            }
         )
     };
 

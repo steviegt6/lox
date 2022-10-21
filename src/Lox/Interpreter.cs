@@ -121,6 +121,14 @@ public class Interpreter : Expr.IVisitor<object?>, Stmt.IVisitor<object?>
         return null;
     }
 
+    public object? VisitIfStmt(Stmt.If stmt) {
+        if (IsTruthy(Evaluate(stmt.Condition)))
+            Execute(stmt.ThenBranch);
+        else if (stmt.ElseBranch is not null) Execute(stmt.ElseBranch);
+
+        return null;
+    }
+
     public object? VisitPrintStmt(Stmt.Print stmt) {
         Console.WriteLine(Stringify(Evaluate(stmt.Expr)));
         return null;

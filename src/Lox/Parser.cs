@@ -47,7 +47,7 @@ public class Parser
                 Token name = variable.Name;
                 return new Expr.Assign(name, value);
             }
-            
+
             Error(equals, "Invalid assignment target.");
         }
 
@@ -152,15 +152,30 @@ public class Parser
         if (Match(EQUAL)) {
             initializer = Expression();
         }
-        
+
         Consume(SEMICOLON, "Expect ';' after variable declaration.");
         return new Stmt.Var(name, initializer);
     }
 
     private Stmt Statement() {
+        if (Match(IF)) return IfStatement();
         if (Match(PRINT)) return PrintStatement();
         if (Match(LEFT_BRACE)) return new Stmt.Block(Block());
         return ExpressionStatement();
+    }
+
+    private Stmt IfStatement() {
+        Consume(LEFT_PAREN, "Expect '(' after 'if'.");
+        Expr condition = Expression();
+        Consume(RIGHT_PAREN, "Expect ')' after if condition.");
+
+        Stmt thenBranch = Statement();
+        Stmt? elseBranch = null;
+        if (Match(ELSE)) {
+            elseBranch = Statement();
+        }
+
+        return new Stmt.If(condition, thenBranch, elseBranch);
     }
 
     private Stmt PrintStatement() {
@@ -181,7 +196,7 @@ public class Parser
         while (!Check(RIGHT_BRACE) && !IsAtEnd()) {
             statements.Add(Declaration());
         }
-        
+
         Consume(RIGHT_BRACE, "Expect '}' after block.");
         return statements;
     }
